@@ -2,7 +2,7 @@
 
 > **Status:** Actively developed, many features are experimental or in progress.
 
-![App Screenshot](https://github.com/ers-laboratories/Aibo-Toolkit/blob/main/images/app.png?raw=true)
+![App Screenshot](dash_interface.png)
 
 ---
 
