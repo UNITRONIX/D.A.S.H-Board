@@ -1,0 +1,66 @@
+{
+  
+  "wifi_settings": "Wi-fi Settings",
+  "apply": "Apply",
+  
+  
+  
+  
+  
+  "change_language": "Change Language",
+  "robot_name": "Robot Name",
+  "coins": "Coins",
+  "os_version": "OS Version",
+  "water": "Water",
+  "hunger": "Hunger",
+  "happiness": "Happiness",
+  "unique_id": "Unique ID",
+  "level": "Level",
+  "experience": "Experience",
+  "mood": "Mood",
+  "power_mode": "Power Mode",
+  "wifi_ssid": "Wi-Fi SSID",
+  "wifi_password": "Wi-Fi Password",
+  "hotspot_mode": "Hotspot Mode",
+  "dark_mode": "Dark Mode",
+  "dash_image": "Dash Image",
+  "battery": "Battery",
+  "connection_type": "Connection Type",
+  "dash_name": "Dash Name",
+  "software_ver": "Software Version",
+  "background_image_set": "Background Image Set",
+  "dash_coins": "Dash Coins",
+  "dash_lvl": "Dash Level",
+  "layout": "Layout",
+  "global_primary_color": "Global Primary Color",
+  "connection": "Connection Status",
+  "eye_outer_color": "Eye Outer Color",
+  "eye_inner_color": "Eye Inner Color",
+  "dash_welcome": "Welcome to D.A.S.H Web Panel!",
+  "robot_desc": "Digital Autonomous Smart Hound",
+
+  "_comment_1": "Pages Translation",
+
+    "main_page": "Main Page",
+    "specifications": "Specifications",
+    "playful": "Playful",
+    "personalization": "Personalization",
+    "service": "Service / Repair",
+    "caring": "Caring",
+    "settings_panel": "Settings Panel",
+    "controls": "Controls",
+    "about": "About",
+
+  "_comment_2": "Update Module Translation",
+
+    "check_updates": "Check for Updates",
+    "no_updates": "No Updates Available",
+    "update_available": "Update Available!",
+    "firmware_ver": "Firmware Version",
+    "app_ver": "App Version",
+
+  "_comment_3": "specification tab Translation"
+
+    
+  
+}

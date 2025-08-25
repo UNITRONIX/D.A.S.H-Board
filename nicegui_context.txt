@@ -1,0 +1,241 @@
+Styling
+While having reasonable defaults, you can still modify the look of your app with CSS as well as Tailwind and Quasar classes.
+
+main.py
+from nicegui import ui
+
+ui.icon('thumb_up')
+ui.markdown('This is **Markdown**.')
+ui.html('This is <strong>HTML</strong>.')
+with ui.row():
+    ui.label('CSS').style('color: #888; font-weight: bold')
+    ui.label('Tailwind').classes('font-serif')
+    ui.label('Quasar').classes('q-ml-xl')
+ui.link('NiceGUI on GitHub', 'https://github.com/zauberzeug/nicegui')
+
+ui.run()
+
+Common UI Elements
+NiceGUI comes with a collection of commonly used UI elements.
+
+main.py
+from nicegui import ui
+from nicegui.events import ValueChangeEventArguments
+
+def show(event: ValueChangeEventArguments):
+    name = type(event.sender).__name__
+    ui.notify(f'{name}: {event.value}')
+
+ui.button('Button', on_click=lambda: ui.notify('Click'))
+with ui.row():
+    ui.checkbox('Checkbox', on_change=show)
+    ui.switch('Switch', on_change=show)
+ui.radio(['A', 'B', 'C'], value='A', on_change=show).props('inline')
+with ui.row():
+    ui.input('Text input', on_change=show)
+    ui.select(['One', 'Two'], value='One', on_change=show)
+ui.link('And many more...', '/documentation').classes('mt-8')
+
+ui.run()
+
+Value Binding
+Binding values between UI elements and data models is built into NiceGUI.
+
+main.py
+from nicegui import ui
+
+class Demo:
+    def __init__(self):
+        self.number = 1
+
+demo = Demo()
+v = ui.checkbox('visible', value=True)
+with ui.column().bind_visibility_from(v, 'value'):
+    ui.slider(min=1, max=3).bind_value(demo, 'number')
+    ui.toggle({1: 'A', 2: 'B', 3: 'C'}).bind_value(demo, 'number')
+    ui.number().bind_value(demo, 'number')
+
+ui.run()
+
+Button
+This element is based on Quasar's QBtn component.
+
+The color parameter accepts a Quasar color, a Tailwind color, or a CSS color. If a Quasar color is used, the button will be styled according to the Quasar theme including the color of the text. Note that there are colors like "red" being both a Quasar color and a CSS color. In such cases the Quasar color will be used.
+
+text:	the label of the button
+on_click:	callback which is invoked when button is pressed
+color:	the color of the button (either a Quasar, Tailwind, or CSS color or None, default: 'primary')
+icon:	the name of an icon to be displayed on the button (default: None)
+main.py
+from nicegui import ui
+
+ui.button('Click me!', on_click=lambda: ui.notify('You clicked me!'))
+
+ui.run()
+
+Button Group
+This element is based on Quasar's QBtnGroup component. You must use the same design props on both the parent button group and the children buttons.
+
+main.py
+from nicegui import ui
+
+with ui.button_group():
+    ui.button('One', on_click=lambda: ui.notify('You clicked Button 1!'))
+    ui.button('Two', on_click=lambda: ui.notify('You clicked Button 2!'))
+    ui.button('Three', on_click=lambda: ui.notify('You clicked Button 3!'))
+
+ui.run()
+
+Dropdown Button
+This element is based on Quasar's QBtnDropDown component.
+
+The color parameter accepts a Quasar color, a Tailwind color, or a CSS color. If a Quasar color is used, the button will be styled according to the Quasar theme including the color of the text. Note that there are colors like "red" being both a Quasar color and a CSS color. In such cases the Quasar color will be used.
+
+text:	the label of the button
+value:	if the dropdown is open or not (default: False)
+on_value_change:
+ 	callback which is invoked when the dropdown is opened or closed
+on_click:	callback which is invoked when button is pressed
+color:	the color of the button (either a Quasar, Tailwind, or CSS color or None, default: 'primary')
+icon:	the name of an icon to be displayed on the button (default: None)
+auto_close:	whether the dropdown should close automatically when an item is clicked (default: False)
+split:	whether to split the dropdown icon into a separate button (default: False)
+main.py
+from nicegui import ui
+
+with ui.dropdown_button('Open me!', auto_close=True):
+    ui.item('Item 1', on_click=lambda: ui.notify('You clicked item 1'))
+    ui.item('Item 2', on_click=lambda: ui.notify('You clicked item 2'))
+
+ui.run()
+
+A badge element wrapping Quasar's QBadge component.
+
+text:	the initial value of the text field
+color:	the color name for component (either a Quasar, Tailwind, or CSS color or None, default: "primary")
+text_color:	text color (either a Quasar, Tailwind, or CSS color or None, default: None)
+outline:	use 'outline' design (colored text and borders only) (default: False)
+main.py
+from nicegui import ui
+
+with ui.button('Click me!', on_click=lambda: badge.set_text(int(badge.text) + 1)):
+    badge = ui.badge('0', color='red').props('floating')
+
+ui.run()
+
+Chip
+A chip element wrapping Quasar's QChip component. It can be clickable, selectable and removable.
+
+text:	the initial value of the text field (default: "")
+icon:	the name of an icon to be displayed on the chip (default: None)
+color:	the color name for component (either a Quasar, Tailwind, or CSS color or None, default: "primary")
+text_color:	text color (either a Quasar, Tailwind, or CSS color or None, default: None)
+on_click:	callback which is invoked when chip is clicked. Makes the chip clickable if set
+selectable:	whether the chip is selectable (default: False)
+selected:	whether the chip is selected (default: False)
+on_selection_change:
+ 	callback which is invoked when the chip's selection state is changed
+removable:	whether the chip is removable. Shows a small "x" button if True (default: False)
+on_value_change:
+ 	callback which is invoked when the chip is removed or unremoved
+main.py
+from nicegui import ui
+
+with ui.row().classes('gap-1'):
+    ui.chip('Click me', icon='ads_click', on_click=lambda: ui.notify('Clicked'))
+    ui.chip('Selectable', selectable=True, icon='bookmark', color='orange')
+    ui.chip('Removable', removable=True, icon='label', color='indigo-3')
+    ui.chip('Styled', icon='star', color='green').props('outline square')
+    ui.chip('Disabled', icon='block', color='red').set_enabled(False)
+
+ui.run()
+
+Toggle
+This element is based on Quasar's QBtnToggle component.
+
+The options can be specified as a list of values, or as a dictionary mapping values to labels. After manipulating the options, call update() to update the options in the UI.
+
+options:	a list ['value1', ...] or dictionary {'value1':'label1', ...} specifying the options
+value:	the initial value
+on_change:	callback to execute when selection changes
+clearable:	whether the toggle can be cleared by clicking the selected option
+main.py
+from nicegui import ui
+
+toggle1 = ui.toggle([1, 2, 3], value=1)
+toggle2 = ui.toggle({1: 'A', 2: 'B', 3: 'C'}).bind_value(toggle1, 'value')
+
+ui.run()
+
+Radio Selection
+This element is based on Quasar's QRadio component.
+
+The options can be specified as a list of values, or as a dictionary mapping values to labels. After manipulating the options, call update() to update the options in the UI.
+
+options:	a list ['value1', ...] or dictionary {'value1':'label1', ...} specifying the options
+value:	the initial value
+on_change:	callback to execute when selection changes
+main.py
+from nicegui import ui
+
+radio1 = ui.radio([1, 2, 3], value=1).props('inline')
+radio2 = ui.radio({1: 'A', 2: 'B', 3: 'C'}).props('inline').bind_value(radio1, 'value')
+
+ui.run()
+
+Dropdown Selection
+This element is based on Quasar's QSelect component.
+
+The options can be specified as a list of values, or as a dictionary mapping values to labels. After manipulating the options, call update() to update the options in the UI.
+
+If with_input is True, an input field is shown to filter the options.
+
+If new_value_mode is not None, it implies with_input=True and the user can enter new values in the input field. See Quasar's documentation for details. Note that this mode is ineffective when setting the value property programmatically.
+
+You can use the validation parameter to define a dictionary of validation rules, e.g. {'Too long!': lambda value: len(value) < 3}. The key of the first rule that fails will be displayed as an error message. Alternatively, you can pass a callable that returns an optional error message. To disable the automatic validation on every value change, you can use the without_auto_validation method.
+
+options:	a list ['value1', ...] or dictionary {'value1':'label1', ...} specifying the options
+label:	the label to display above the selection
+value:	the initial value
+on_change:	callback to execute when selection changes
+with_input:	whether to show an input field to filter the options
+new_value_mode:	handle new values from user input (default: None, i.e. no new values)
+multiple:	whether to allow multiple selections
+clearable:	whether to add a button to clear the selection
+validation:	dictionary of validation rules or a callable that returns an optional error message (default: None for no validation)
+key_generator:	a callback or iterator to generate a dictionary key for new values
+main.py
+from nicegui import ui
+
+select1 = ui.select([1, 2, 3], value=1)
+select2 = ui.select({1: 'One', 2: 'Two', 3: 'Three'}).bind_value(select1, 'value')
+
+ui.run()
+
+Checkbox
+This element is based on Quasar's QCheckbox component.
+
+text:	the label to display next to the checkbox
+value:	whether it should be checked initially (default: False)
+on_change:	callback to execute when value changes
+main.py
+from nicegui import ui
+
+checkbox = ui.checkbox('check me')
+ui.label('Check!').bind_visibility_from(checkbox, 'value')
+
+ui.run()
+
+Switch
+This element is based on Quasar's QToggle component.
+
+text:	the label to display next to the switch
+value:	whether it should be active initially (default: False)
+on_change:	callback which is invoked when state is changed by the user
+main.py
+from nicegui import ui
+
+switch = ui.switch('switch me')
+ui.label('Switch!').bind_visibility_from(switch, 'value')
+
+ui.run()
