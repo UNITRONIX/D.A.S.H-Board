@@ -832,7 +832,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                             ui.icon('favorite', color='primary').classes('text-2xl').props('flat round').classes('w-full h-full')
 
                             with ui.card().classes('w-full h-full'):
-                                ui.label('Aibo Coins:').style('font-weight: 1000; font-size: 120%')
+                                ui.label(t('coins')).style('font-weight: 1000; font-size: 120%')
                             
                                 with ui.row():
                                     #aibo coins icon
@@ -842,7 +842,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                     #left card
             with ui.card().classes('opacity-95 h-full'):
                 #dash coins
-                ui.label('Dash Coins:').style('font-weight: 1000; font-size: 120%')
+                ui.label(t('coins')).style('font-weight: 1000; font-size: 120%')
                 ui.label(config['dash_coins']).style('font-weight: 1000; font-size: 230%')
 
                 #playful tab menu with shops        
@@ -894,83 +894,83 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
             #ebi card
     # Settings
     with ui.tab_panel(settings):
-                ui.label('Settings Panel').style('font-size: 200%; font-weight: 1000')
+                ui.label(t('settings_panel')).style('font-size: 200%; font-weight: 1000')
 
-                ui.label('Wi-fi Settings').style('font-size: 130%; font-weight: 500')
-                ui.button('Wi-fi/hotspot setup', on_click=show_wifi_dialog)
+                ui.label(t('wifi_settings')).style('font-size: 130%; font-weight: 500')
+                ui.button(t('wifi/hotspot_settings'), on_click=show_wifi_dialog)
 
                 ui.separator() # separator ui
 
                 #Dark mode switch
-                with ui.switch('Dark mode').bind_value(dark_mode) as dark_mode_switch:
-                    ui.label('Dark Mode Enabled!').bind_visibility_from(dark_mode_switch, 'value').style('color: green')
-                    ui.tooltip('Enable dark mode').classes('bg-green')
+                with ui.switch(t('dark_mode')).bind_value(dark_mode) as dark_mode_switch:
+                    ui.label(t('dark_mode_enabled')).bind_visibility_from(dark_mode_switch, 'value').style('color: green')
+                    ui.tooltip(t('enable_dark_mode')).classes('bg-green')
 
                 ui.separator() # separator ui
 
                 #Mobile layout switch
-                ui.label('GUI Mode Switch').style('font-size: 130%; font-weight: 500')
-                with ui.toggle({0: 'Desktop', 1: 'Mobile'}, value=gui_layout, on_change=lambda e: layout_mod(layout_value=e.value)) as layout_switch:
-                    ui.tooltip('Enable mobile layout for smartphones').classes('bg-green')
+                ui.label(t('gui_mode_switch')).style('font-size: 130%; font-weight: 500')
+                with ui.toggle({0: t('desktop'), 1: t('mobile')}, value=gui_layout, on_change=lambda e: layout_mod(layout_value=e.value)) as layout_switch:
+                    ui.tooltip(t('enable_mobile_layout')).classes('bg-green')
                     
                 ui.separator() # separator ui
 
                 #GUI Primary color changer
-                ui.label('GUI Primary color').style('font-size: 130%; font-weight: 500')
+                ui.label(t('global_primary_color')).style('font-size: 130%; font-weight: 500')
                 with ui.button(icon='colorize'):
                     picker = ui.color_picker(on_pick=lambda e: (ui.colors(primary =f'{e.color}'), change_global_color(value=e.color)))
                     picker.q_color.props('default-view=palette no-header no-footer')
 
                 ui.separator() # separator ui
 
-                ui.label('Change Background image').style('font-size: 130%; font-weight: 500')
+                ui.label(t('background_image_change')).style('font-size: 130%; font-weight: 500')
                 with ui.dialog().classes('w-columns-2xs') as bg_changer, ui.card():
                     with ui.row().classes('grid grid-cols-3 w-full'):
                         with ui.card().classes('w-full bg-transparent w-2xs'):
                             ui.image("images/background/119.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/119.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/119.png"))
                         
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/14.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/14.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/14.png"))
 
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/25.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/25.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/25.png"))
 
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/35.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/35.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/35.png"))
 
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/54.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/54.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/54.png"))
 
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/63.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/63.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/63.png"))
 
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/116.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/116.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/116.png"))
 
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/118.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/118.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/118.png"))
 
                         with ui.card().classes('w-full bg-transparent'):
                             ui.image("images/background/125.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button('Select', on_click=lambda: change_background_image("images/background/125.png"))
+                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/125.png"))
                 ui.button('Select background', on_click=bg_changer.open)
 
                 ui.separator() # separator ui
 
-                ui.label('Power management').style('font-size: 130%; font-weight: 500')
+                ui.label(t('power_mgmt')).style('font-size: 130%; font-weight: 500')
 
                 power_mode_value = {'powersave': 1, 'ondemand': 2, 'performance': 3}.get(config.get('power-mode', 'ondemand'), 2)
 
                 power_mode_select = ui.toggle(
-                    {1: 'Power Saving', 2: 'Normal', 3: 'Performance'},
+                    {1: t('power_save'), 2: t('normal'), 3: t('high_performance')},
                     value=power_mode_value,
                     on_change=lambda e: set_power_mode(e.value)
                 )

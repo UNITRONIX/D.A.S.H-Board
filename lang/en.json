@@ -1,6 +1,6 @@
 {
   
-  "wifi_settings": "Wi-fi Settings",
+  
   "apply": "Apply",
   
   
@@ -11,28 +11,25 @@
   "robot_name": "Robot Name",
   "coins": "Coins",
   "os_version": "OS Version",
-  "water": "Water",
-  "hunger": "Hunger",
+  
   "happiness": "Happiness",
   "unique_id": "Unique ID",
   "level": "Level",
   "experience": "Experience",
   "mood": "Mood",
-  "power_mode": "Power Mode",
-  "wifi_ssid": "Wi-Fi SSID",
-  "wifi_password": "Wi-Fi Password",
-  "hotspot_mode": "Hotspot Mode",
-  "dark_mode": "Dark Mode",
+  
+  
+  
   "dash_image": "Dash Image",
   "battery": "Battery",
   "connection_type": "Connection Type",
   "dash_name": "Dash Name",
   "software_ver": "Software Version",
-  "background_image_set": "Background Image Set",
+  
   "dash_coins": "Dash Coins",
   "dash_lvl": "Dash Level",
   "layout": "Layout",
-  "global_primary_color": "Global Primary Color",
+  
   "connection": "Connection Status",
   "eye_outer_color": "Eye Outer Color",
   "eye_inner_color": "Eye Inner Color",
@@ -58,9 +55,34 @@
     "update_available": "Update Available!",
     "firmware_ver": "Firmware Version",
     "app_ver": "App Version",
-
-  "_comment_3": "specification tab Translation"
-
-    
   
+  "_comment_3": "specification tab Translation",
+
+  "_comment_4": "settings panel translation",
+    
+    "wifi_settings": "Wi-fi Settings",
+    "wifi/hotspot_settings": "Wi-fi/hotspot setup",
+    "dark_mode": "Dark Mode",
+    "dark_mode_enabled": "Dark Mode Enabled!",
+    "enable_dark_mode": "Enable Dark Mode",
+    "wifi_ssid": "Wi-Fi SSID",
+    "wifi_password": "Wi-Fi Password",
+    "hotspot_mode": "Hotspot Mode",
+    "power_mgmt": "Power management",
+    "background_image_change": "Change Background image",
+    "gui_mode_switch": "Switch GUI Mode",
+    "desktop": "Desktop",
+    "mobile": "Mobile",
+    "enable_mobile_layout": "Enable mobile layout for smartphones",
+    "global_primary_color": "Global Primary Color",
+    "select": "Select",
+    "power_save": "Power Save",
+    "normal": "Normal",
+    "high_performance": "High Performance",
+
+  "_comment_5": "caring tab translation",
+
+    "hunger": "Hunger",
+    "water": "Water",
+    "love": "Love"
 }
