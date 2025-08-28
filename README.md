@@ -109,7 +109,7 @@ D.A.S.H Toolkit is a modern configuration and personalization web panel for the 
 
 ## Authors
 
-ERS Laboratories / UNITRONIX  
+UNITRONIX  
 [GitHub Project](https://github.com/ers-laboratories/Aibo-Toolkit)
 
 ---
