@@ -119,6 +119,21 @@ def t(key):
     return current_lang['data'].get(key, key)
 
 load_language(config['language'])
+
+def load_language_selector():
+    path = os.path.join(LANG_DIR, 'language_selector.json')
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return [
+            {"code": "en", "label": "English", "flag": "images/language_flags/us.png"}
+        ]
+    
+def get_background_images():
+    bg_dir = os.path.join(os.path.dirname(__file__), 'images', 'background')
+    # Obsługa plików png, jpg, jpeg
+    return sorted(glob.glob(os.path.join(bg_dir, '*.png')) + glob.glob(os.path.join(bg_dir, '*.jpg')) + glob.glob(os.path.join(bg_dir, '*.jpeg')))
         
 #Global color apply
 ui.colors(primary=config['global_primary_color'])
@@ -461,7 +476,17 @@ def eye_color_change_outer(outer_color):
     config['eye_outer_color'] = outer_color
     update_config('eye_outer_color', outer_color)
     ui.notify('Eye outer color changed!')
-    os.utime('main.py') 
+    os.utime('main.py')
+
+def on_profile_upload(upload_event):
+    file_name = upload_event.name
+    dest_path = os.path.join('images/profile', file_name)
+    # Odczytaj zawartość pliku i zapisz
+    with open(dest_path, 'wb') as f:
+        f.write(upload_event.content.read())
+    update_config('dash_image', dest_path)
+    ui.notify('Profile image updated!')
+    os.utime('main.py')
 
 @api.get("/coin_inject")
 def coins_injector(coins_amount: int):
@@ -560,6 +585,15 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                             ui.label(t('your_dash')).style('font-size: 150%; font-weight: 1000')
                             ui.label(config['robot-name']).style('font-size: 250%; font-weight: 1000').classes('text-center')
                             ui.chat_message(aibo_daily_message).style('font-size: 150%')
+                            with ui.dialog() as profile_dialog, ui.card():
+                                ui.label(t('dash_image')).style('font-size: 120%; font-weight: 1000')
+                                ui.upload(
+                                    on_upload=on_profile_upload,
+                                    on_rejected=lambda: ui.notify('Rejected!'),
+                                    max_file_size=10_000_000
+                                ).classes('max-w-full').props('accept=".jpeg,.jpg,.png"')
+                                ui.button(t('cancel'), on_click=profile_dialog.close)
+                            ui.button(t('change_profile_image'), on_click=profile_dialog.open)
                             with ui.dialog() as name_change_dialog, ui.card():
                                 name_input =ui.input(t('change_dash_name'), value=config['robot-name'])
                                 ui.button(t('set_new_name'), on_click= lambda: change_name(name_input.value)).style('font-size: 120%; font-weight: 1000')
@@ -767,12 +801,22 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
             #language change
             with ui.card():
                 ui.label(t('language_change')).style('font-size: 150%; font-weight: 1000')
-                languages = [
-                    {'code': 'en', 'label': 'English', 'flag': 'images/language_flags/us.png'},
-                    {'code': 'pl', 'label': 'Polski', 'flag': 'images/language_flags/pl.svg'},
-                ]
+                languages = load_language_selector()
                 lang_options = {lang['code']: lang['label'] for lang in languages}
                 selected_lang = [config.get('language', 'en')]
+
+                # Funkcja pomocnicza do pobierania ścieżki flagi dla wybranego języka
+                def get_flag_path(lang_code):
+                    for lang in languages:
+                        if lang['code'] == lang_code:
+                            return lang['flag']
+                    return "images/language_flags/default.png"
+
+                flag_image = ui.image(get_flag_path(selected_lang[0])).classes('rounded-full w-24 h-24 m-auto mb-2')
+
+                def on_language_change(e):
+                    selected_lang[0] = e.value
+                    flag_image.set_source(get_flag_path(e.value))
 
                 def apply_language():
                     update_config('language', selected_lang[0])
@@ -780,12 +824,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                     ui.notify(f"Language set to: {selected_lang[0]}")
                     os.utime('main.py')
 
-                with ui.row().classes('items-center'):
-                    # Flagi języków
-                    for lang in languages:
-                        ui.image(lang['flag']).classes('rounded-full w-16 h-16')
-                    # Radio wybór języka
-                    ui.radio(options=lang_options, value=selected_lang[0], on_change=lambda e: selected_lang.__setitem__(0, e.value))
+                ui.radio(options=lang_options, value=selected_lang[0], on_change=on_language_change)
                 ui.button(t('apply'), on_click=apply_language)
     # New playful dash tab
     with ui.tab_panel(playful_dash):
@@ -928,45 +967,14 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         ui.separator() # separator ui
 
                         #background image changer
-                        ui.label(t('background_image_change')).style('font-size: 130%; font-weight: 500')
-                        with ui.dialog().classes('w-columns-2xs') as bg_changer, ui.card():
-                            with ui.row().classes('grid grid-cols-3 w-full'):
-                                with ui.card().classes('w-full bg-transparent w-2xs'):
-                                    ui.image("images/background/119.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/119.png"))
-                                
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/14.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/14.png"))
-
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/25.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/25.png"))
-
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/35.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/35.png"))
-
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/54.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/54.png"))
-
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/63.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/63.png"))
-
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/116.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/116.png"))
-
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/118.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/118.png"))
-
-                                with ui.card().classes('w-full bg-transparent'):
-                                    ui.image("images/background/125.png").props('fit=scale-down').classes('rounded-full')
-                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/125.png"))
-                        ui.button('Select background', on_click=bg_changer.open)
+                        with ui.dialog().classes('w-columns-2xs') as bg_changer, ui.card().classes('p-6 shadow-lg'):
+                            with ui.row().classes('grid grid-cols-3 gap-4 w-full'):
+                                for img_path in get_background_images():
+                                    rel_path = os.path.relpath(img_path, os.path.dirname(__file__))
+                                    with ui.card().classes('w-full flex flex-col items-center'):
+                                        ui.image(rel_path).props('fit=scale-down').classes('rounded-full w-32 h-32 shadow-md mb-2')
+                                        ui.button(t('select'), on_click=lambda p=rel_path: change_background_image(p)).classes('w-full')
+                        ui.button(t('background_image_change'), on_click=bg_changer.open)
 
                         ui.separator() # separator ui
 
@@ -988,16 +996,6 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         ui.button(t('wifi/hotspot_settings'), on_click=show_wifi_dialog)
 
                         ui.separator() # separator ui
-                
-
-                
-
-                
-
-                
-
-
-                
                 
     # About
     with ui.tab_panel(about):
