@@ -15,9 +15,25 @@ D.A.S.H Toolkit is a modern configuration and personalization web panel for the 
 ## Requirements
 
 - Python 3.8+
-- `pip install nicegui psutil`
-- (Optional) `pywebview`, other system dependencies
 - Linux system recommended for full WiFi/Hotspot support (via `nmcli`)
+
+### Python dependencies
+
+Install all required modules with:
+```sh
+pip install -r requirements.txt
+```
+
+**Current required modules:**
+- nicegui
+- psutil
+- device-detector
+- netifaces
+- fastapi
+- starlette
+- pytest-shutil
+- uvicorn
+- requests
 
 ---
 
@@ -67,9 +83,10 @@ D.A.S.H Toolkit is a modern configuration and personalization web panel for the 
 ### 9. **Daily Coins Bonus**
 - The script automatically adds coins to your account every 24 hours (configurable)
 
-### 10. **Language Support (Planned/Experimental)**
+### 10. **Language Support (Experimental)**
 - Language files (`lang/en.json`, `lang/pl.json`, etc.) for easy translation and switching
-- UI elements can be translated via language files (see code for details)
+- UI elements can be translated via language files
+- Language can be changed live from the Personalization tab
 
 ---
 
@@ -77,7 +94,7 @@ D.A.S.H Toolkit is a modern configuration and personalization web panel for the 
 
 1. Install dependencies:
    ```
-   pip install nicegui psutil
+   pip install -r requirements.txt
    ```
 2. Start the app:
    ```
@@ -92,7 +109,7 @@ D.A.S.H Toolkit is a modern configuration and personalization web panel for the 
 - **main.py** – main application script
 - **config.json** – main configuration file (all persistent settings)
 - **images/** – backgrounds and profile images
-- **lang/** – language files (for future multi-language support)
+- **lang/** – language files (for multi-language support)
 
 ---
 
@@ -116,3 +133,10 @@ UNITRONIX
 
 **Note:**  
 This is an early alpha release – many features are experimental or require a physical D.A.S.H
+
+---
+
+## License & Usage
+
+This project is licensed under a modified MIT license (see LICENSE file for details).  
+**You are free to use, modify, and create your own versions of this software, but any modified versions must be distributed for free as a public fork. Commercial use is not permitted without explicit permission from the author.**

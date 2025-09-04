@@ -2,32 +2,31 @@
   
   
   "apply": "Apply",
-  
-  
-  
-  
-  
+  "cancel": "Cancel",
   "change_language": "Change Language",
   "robot_name": "Robot Name",
   "coins": "Coins",
   "os_version": "OS Version",
-  
+  "vitals": "Vitals",
   "happiness": "Happiness",
   "unique_id": "Unique ID",
   "level": "Level",
   "experience": "Experience",
   "mood": "Mood",
-  
-  
-  
-  "dash_image": "Dash Image",
+  "your_dash": "Your D.A.S.H",
+  "change_dash_name": "Change D.A.S.H Name",
+  "change_name": "Change Name",
+  "set_new_name": "Set New Name",
+  "dash_image": "D.A.S.H Image",
   "battery": "Battery",
   "connection_type": "Connection Type",
-  "dash_name": "Dash Name",
+  "dash_name": "D.A.S.H Name",
   "software_ver": "Software Version",
-  
-  "dash_coins": "Dash Coins",
-  "dash_lvl": "Dash Level",
+  "network": "Network",
+  "device_id": "Device ID",
+  "cloud_token": "Cloud Token",
+  "dash_coins": "D.A.S.H Coins",
+  "dash_lvl": "D.A.S.H Level",
   "layout": "Layout",
   
   "connection": "Connection Status",
@@ -58,6 +57,35 @@
   
   "_comment_3": "specification tab Translation",
 
+    "cpu_specs": "CPU Specification",
+    "cpu_usage": "CPU Usage",
+    "cores": "Cores",
+    "threads": "Threads",
+    "cpu_core_usage_table": "CPU Core Usage Table",
+    "device_specification_table": "Device Specification Table",
+    "sys": "System",
+    "node": "Node",
+    "release": "Release",
+    "version": "Version",
+    "machine": "Machine",
+    "processor": "Processor",
+    "python": "Python",
+    "cpu_temp": "CPU Temp",
+    "core": "Core",
+    "ram": "RAM",
+    "ram_type": "RAM Type",
+    "disk": "Disk",
+    "disk_type": "Disk Type",
+
+  "_comment_6": "personalization tab translation",
+
+    "control_panel": "Control Panel",
+    "personalize_your_dash": "Personalize your D.A.S.H",
+    "eye_color": "Eye Color",
+    "outer_color": "Outer Color",
+    "inner_color": "Inner Color",
+    "language_change": "Language Change",
+
   "_comment_4": "settings panel translation",
     
     "wifi_settings": "Wi-fi Settings",
@@ -79,10 +107,23 @@
     "power_save": "Power Save",
     "normal": "Normal",
     "high_performance": "High Performance",
+    "network_settings": "Network Settings",
+    "ui_settings": "UI Settings",
+    "power_settings": "Power Settings",
 
   "_comment_5": "caring tab translation",
 
     "hunger": "Hunger",
     "water": "Water",
-    "love": "Love"
+    "love": "Love",
+    "restaurant": "Restaurant",
+    "toy_store": "Toy Store",
+    "large_meal": "Large Meal",
+    "medium_meal": "Medium Meal",
+    "small_meal": "Small Meal",
+    "food": "Food",
+    "buy": "Buy",
+
+  "_comment_7": "service tab translation",
+    "find_dash_repair_service": "Find D.A.S.H Repair Service"
 }

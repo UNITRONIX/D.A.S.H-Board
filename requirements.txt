@@ -1,10 +1,9 @@
 nicegui
 psutil
-pickle-mixin
 device-detector
 netifaces
 fastapi
 starlette
 pytest-shutil
-platformdirs
 uvicorn
+requests

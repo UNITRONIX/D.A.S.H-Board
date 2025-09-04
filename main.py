@@ -118,7 +118,7 @@ def load_language(lang_code):
 def t(key):
     return current_lang['data'].get(key, key)
 
-load_language('en')
+load_language(config['language'])
         
 #Global color apply
 ui.colors(primary=config['global_primary_color'])
@@ -372,7 +372,7 @@ def start_hotspot(ssid, password):
         result = subprocess.run(cmd, shell=True, capture_output=True)
         return result.returncode == 0
     except Exception as e:
-        print(f"Błąd tworzenia hotspotu: {e}")
+        print(f"Error starting hotspot: {e}")
         return False
 
 def save_wifi_config(mode, ssid, password):
@@ -401,21 +401,21 @@ def show_wifi_dialog():
             if selected_mode == 'wifi':
                 if try_connect_wifi(selected_ssid, selected_password):
                     save_wifi_config('wifi', selected_ssid, selected_password)
-                    status_label.set_text('Połączono z WiFi!').style('color: green')
-                    ui.notify('Połączono z WiFi!')
+                    status_label.set_text('Connected to WiFi!').style('color: green')
+                    ui.notify('Connected to WiFi!')
                     wifi_dialog.close()
                 else:
-                    status_label.set_text('Błąd połączenia. Spróbuj ponownie.')
+                    status_label.set_text('Error with connecting to WiFi. Try again.')
             else:
                 if start_hotspot(selected_ssid, selected_password):
                     save_wifi_config('hotspot', selected_ssid, selected_password)
-                    status_label.set_text('Hotspot uruchomiony!').style('color: green')
-                    ui.notify('Hotspot uruchomiony!')
+                    status_label.set_text('Hotspot is launched!').style('color: green')
+                    ui.notify('Hotspot is launched!')
                     wifi_dialog.close()
                 else:
-                    status_label.set_text('Błąd uruchamiania hotspotu. Spróbuj ponownie.')
-        ui.button('Zastosuj', on_click=apply)
-        ui.button('Anuluj', on_click=wifi_dialog.close)
+                    status_label.set_text('Error with launching hotspot.')
+        ui.button(t('apply'), on_click=apply)
+        ui.button(t('cancel'), on_click=wifi_dialog.close)
     wifi_dialog.open()
 
 
@@ -557,13 +557,13 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                 with ui.card():
                     with ui.row().classes('grid grid-cols-2 w-full opacity-95'):
                         with ui.row().classes('grid grid-cols-1 w-full opacity-95'):
-                            ui.label("Your D.A.S.H: ").style('font-size: 150%; font-weight: 1000')
+                            ui.label(t('your_dash')).style('font-size: 150%; font-weight: 1000')
                             ui.label(config['robot-name']).style('font-size: 250%; font-weight: 1000').classes('text-center')
                             ui.chat_message(aibo_daily_message).style('font-size: 150%')
                             with ui.dialog() as name_change_dialog, ui.card():
-                                name_input =ui.input('Change D.A.S.H name')
-                                ui.button('Set new name', on_click= lambda: change_name(name_input.value)).style('font-size: 150%; font-weight: 1000')
-                            ui.button('change name', on_click=name_change_dialog.open)
+                                name_input =ui.input(t('change_dash_name'), value=config['robot-name'])
+                                ui.button(t('set_new_name'), on_click= lambda: change_name(name_input.value)).style('font-size: 120%; font-weight: 1000')
+                            ui.button(t('change_name'), on_click=name_change_dialog.open)
 
                         #aibo image scaling
                         #with ui.card().classes('w-full justify-center').style('text-align: center'):
@@ -579,8 +579,8 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         #ui.button('Change image', on_click=dialog.open).style('font-weight: 1000')
 
                         #dash Vitals
-                    
-                    with ui.expansion('Vitals', icon='bar_chart').classes('w-full text-2xl'):
+
+                    with ui.expansion(t('vitals'), icon='bar_chart').classes('w-full text-2xl'):
                             with ui.row().classes('grid grid-cols-3 w-full'):
                                 #Food
                                 with ui.card().classes('w-full'):
@@ -611,7 +611,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                 with ui.card():
                                     with ui.row().classes('grid grid-cols-2 w-full opacity-95'):
                                         with ui.row().classes('grid grid-cols-1 w-full opacity-95'):
-                                            ui.label('Network:').style('font-weight: 1000')
+                                            ui.label(t('network')).style('font-weight: 1000')
                                             ui.label(check_network_type()).style('font-weight: 1000; font-size: 150%')
                                         ui.icon('wifi', color='primary').classes('text-6xl')
                                 # -
@@ -619,7 +619,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                 with ui.card():
                                      with ui.row().classes('grid grid-cols-2 w-full opacity-95'):
                                         with ui.row().classes('grid grid-cols-1 w-full opacity-95'):
-                                            ui.label('Battery:').style('font-weight: 1000')
+                                            ui.label(t('battery')).style('font-weight: 1000')
                                             ui.label(get_battery_level()).style('font-weight: 1000; font-size: 150%')
                                         ui.icon('battery_full', color='primary').classes('text-6xl')
                                 # -
@@ -627,20 +627,20 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                 with ui.card():
                                     with ui.row().classes('grid grid-cols-2 w-full opacity-95'):
                                         with ui.row().classes('grid grid-cols-1 w-full opacity-95'):
-                                            ui.label('Software:').style('font-weight: 1000')
+                                            ui.label(t('software')).style('font-weight: 1000')
                                             ui.label(config['os-version']).style('font-weight: 1000; font-size: 150%')
                                         ui.icon('api', color='primary').classes('text-6xl')
                                 # dash mood box
                                 with ui.card():
                                     with ui.row().classes('grid grid-cols-2 w-full opacity-95'):
                                         with ui.row().classes('grid grid-cols-1 w-full opacity-95'):
-                                            ui.label('Mood:').style('font-weight: 1000')
+                                            ui.label(t('mood')).style('font-weight: 1000')
                                             ui.label(config['mood']).style('font-weight: 1000; font-size: 150%')
                                         ui.icon('theater_comedy', color='primary').classes('text-6xl')
 
-                                ui.chip('Device ID', icon='content_copy', on_click=lambda: ui.clipboard.write(config['unique-id'])).style('font-weight: 1000; font-size: 150%')
+                                ui.chip(t('device_id'), icon='content_copy', on_click=lambda: ui.clipboard.write(config['unique-id'])).style('font-weight: 1000; font-size: 150%')
 
-                                ui.chip('Cloud Token', icon='content_copy', on_click=lambda: ui.clipboard.write(config['cloud-token'])).style('font-weight: 1000; font-size: 150%')
+                                ui.chip(t('cloud_token'), icon='content_copy', on_click=lambda: ui.clipboard.write(config['cloud-token'])).style('font-weight: 1000; font-size: 150%')
                                 async def read() -> None:
                                     ui.notify(await ui.clipboard.read())
 
@@ -654,7 +654,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                 with ui.card().classes('w-full'):
 
                     with ui.card().classes('w-full'):
-                        ui.label('CPU specifications').style('font-size: 130%; font-weight: 1000')
+                        ui.label(t('cpu_specs')).style('font-size: 130%; font-weight: 1000')
                         cpu_label = ui.label().style('font-size: 120%')
                         cpu_threads_label = ui.label().style('font-size: 120%')
                         # Dynamiczne paski progresu dla rdzeni
@@ -662,7 +662,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         core_labels = []
                     
                     with ui.card().classes('w-full'):
-                        ui.label('CPU core usage table').style('font-size: 130%; font-weight: 1000')
+                        ui.label(t('cpu_core_usage_table')).style('font-size: 130%; font-weight: 1000')
                         for i in range(psutil.cpu_count()):
                             with ui.row().classes('items-center').classes('w-full'):
                                 bar = ui.linear_progress(value=0, show_value=False).classes('w-full')
@@ -682,18 +682,18 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
 
                 # Device specs table
                 with ui.card().classes('w-full opacity-95'):
-                    ui.label('Device Specification Table').style('font-size: 130%; font-weight: 1000')
+                    ui.label(t('device_specification_table')).style('font-size: 130%; font-weight: 1000')
                     def get_full_device_specs():
                         specs = [
-                            ("System", platform.system()),
-                            ("Node", platform.node()),
-                            ("Release", platform.release()),
-                            ("Version", platform.version()),
-                            ("Machine", platform.machine()),
-                            ("Processor", get_cpu_info()),
-                            ("Python", platform.python_version()),
-                            ("Battery", get_battery_status()),
-                            ("CPU Temp", get_cpu_temperature()),
+                            (t('sys'), platform.system()),
+                            (t('node'), platform.node()),
+                            (t('release'), platform.release()),
+                            (t('version'), platform.version()),
+                            (t('machine'), platform.machine()),
+                            (t('processor'), get_cpu_info()),
+                            (t('python'), platform.python_version()),
+                            (t('battery'), get_battery_status()),
+                            (t('cpu_temp'), get_cpu_temperature()),
                         ]
                         return specs
                     table = ui.table(
@@ -713,20 +713,20 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         cpu_percent = psutil.cpu_percent(interval=None)
                         per_core = psutil.cpu_percent(interval=None, percpu=True)
                         cpu_label.set_text(f'CPU usage: {cpu_percent}%')
-                        cpu_threads_label.set_text(f'Cores: {psutil.cpu_count(logical=False)}, Threads: {psutil.cpu_count()}')
+                        cpu_threads_label.set_text(f'{t("cores")}: {psutil.cpu_count(logical=False)}, {t("threads")}: {psutil.cpu_count()}')
                         # Aktualizacja pasków progresu dla rdzeni/wątków
                         for i, bar in enumerate(core_progress_bars):
                             if i < len(per_core):
                                 bar.value = per_core[i] / 100
-                                core_labels[i].set_text(f'Core {i}: {per_core[i]}%')
+                                core_labels[i].set_text(f'{t("core")} {i}: {per_core[i]}%')
                         mem = psutil.virtual_memory()
-                        ram_label.set_text(f'RAM: {mem.used / (1024**3):.2f}GB / {mem.total / (1024**3):.2f}GB ({mem.percent}%)')
-                        ram_type_label.set_text(f'RAM type: {get_ram_type()}')
+                        ram_label.set_text(f'{t("ram")}: {mem.used / (1024**3):.2f}GB / {mem.total / (1024**3):.2f}GB ({mem.percent}%)')
+                        ram_type_label.set_text(f'{t("ram_type")}: {get_ram_type()}')
                         ram_progress.value = mem.percent / 100
                         ram_percent_label.set_text(f'{mem.percent}%')
                         disk = psutil.disk_usage('/')
-                        disk_label.set_text(f'Disk: {disk.used / (1024**3):.2f}GB / {disk.total / (1024**3):.2f}GB ({disk.percent}%)')
-                        disk_type_label.set_text(f'Disk type: {get_disk_type()}')
+                        disk_label.set_text(f'{t("disk")}: {disk.used / (1024**3):.2f}GB / {disk.total / (1024**3):.2f}GB ({disk.percent}%)')
+                        disk_type_label.set_text(f'{t("disk_type")}: {get_disk_type()}')
                         disk_progress.value = disk.percent / 100
                         disk_percent_label.set_text(f'{disk.percent}%')
                         # Aktualizacja tabeli specyfikacji
@@ -735,22 +735,22 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                     ui.timer(1.0, update_stats)
     # Controls
     with ui.tab_panel(controls):
-        ui.label('Control Panel').style('font-size: 200%; font-weight: 1000')
+        ui.label(t('control_panel')).style('font-size: 200%; font-weight: 1000')
     # Personalization
     with ui.tab_panel(personalization):
 
         ui.image(background_image_set).classes('absolute inset-0')
         with ui.card().classes("w-full text-center"):
-            ui.label('Personalize your D.A.S.H:').style('font-size: 200%; font-weight: 1000')
+            ui.label(t('personalize_your_dash')).style('font-size: 200%; font-weight: 1000')
         with ui.row().classes(personalization_layout):
 
             #Aibo eye color picker
             with ui.card():
-                ui.label("Eye color:").style('font-size: 150%; font-weight: 1000')
+                ui.label(t('eye_color')).style('font-size: 150%; font-weight: 1000')
                 with ui.row().classes('grid grid-cols-2 w-full'):
                     # color settings
                     with ui.card():
-                        ui.label("Outer Color:")
+                        ui.label(t('outer_color'))
                         with ui.button(icon='colorize') as outer_color:
                             eye_outer_color = ui.color_picker(on_pick=lambda e: outer_color.classes(f'!bg-[{e.color}]', eye_color_change_outer(outer_color=e.color)))
                             eye_outer_color.q_color.props('default-view=palette no-header no-footer')
@@ -766,23 +766,27 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                 ui.label()
             #language change
             with ui.card():
-                ui.label("Language change:").style('font-size: 150%; font-weight: 1000')
-                with ui.tabs().classes('w-full') as tabs:
-                    ui.tab('h', label='English')
-                    ui.tab('a', label='Polish')
-                with ui.tab_panels(tabs, value='h').classes('w-full'):
-                    with ui.tab_panel('h'):
-                        with ui.row().classes('grid grid-cols-2 w-full'):
-                            ui.image("images/language_flags/us.png").classes("rounded-full")
-                            with ui.card():
-                                ui.label('Global English for D.A.S.H')
-                                ui.button('Apply', on_click=lambda: ui.notify('English language applied to D.A.S.H'))
-                    with ui.tab_panel('a'):
-                        with ui.row().classes('grid grid-cols-2 w-full'):
-                            ui.image("images/language_flags/pl.svg").classes("rounded-full")
-                            with ui.card():
-                                ui.label('Global Polish for D.A.S.H')
-                                ui.button('Apply', on_click=lambda: ui.notify('Polish language applied to D.A.S.H'))
+                ui.label(t('language_change')).style('font-size: 150%; font-weight: 1000')
+                languages = [
+                    {'code': 'en', 'label': 'English', 'flag': 'images/language_flags/us.png'},
+                    {'code': 'pl', 'label': 'Polski', 'flag': 'images/language_flags/pl.svg'},
+                ]
+                lang_options = {lang['code']: lang['label'] for lang in languages}
+                selected_lang = [config.get('language', 'en')]
+
+                def apply_language():
+                    update_config('language', selected_lang[0])
+                    load_language(selected_lang[0])
+                    ui.notify(f"Language set to: {selected_lang[0]}")
+                    os.utime('main.py')
+
+                with ui.row().classes('items-center'):
+                    # Flagi języków
+                    for lang in languages:
+                        ui.image(lang['flag']).classes('rounded-full w-16 h-16')
+                    # Radio wybór języka
+                    ui.radio(options=lang_options, value=selected_lang[0], on_change=lambda e: selected_lang.__setitem__(0, e.value))
+                ui.button(t('apply'), on_click=apply_language)
     # New playful dash tab
     with ui.tab_panel(playful_dash):
         ui.image(background_image_set).classes('absolute inset-0')
@@ -813,7 +817,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                     #aibo Vitals
                     with ui.row().classes('grid grid-cols-2 w-full'):
                             with ui.card().classes('w-full'):
-                                ui.label("Vitals:").style('font-size: 150%; font-weight: 1000')
+                                ui.label(t('vitals')).style('font-size: 150%; font-weight: 1000')
                                 with ui.row().classes('grid grid-cols-3 w-full'):
                                 
                                     #Food
@@ -847,13 +851,13 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
 
                 #playful tab menu with shops        
                 with ui.tabs().classes('w-full') as playful_tabs:
-                    ui.tab('restaurant', label='Restaurant', icon='restaurant')
-                    ui.tab('toy_shop', label='Toy Shop', icon='toys')
+                    ui.tab('restaurant', label=t('restaurant'), icon='restaurant')
+                    ui.tab('toy_shop', label=t('toy_store'), icon='toys')
 
                 with ui.tab_panels(playful_tabs, value='restaurant').classes('w-full'):
-                    
-                    with ui.tab_panel('restaurant').classes('h-full'):
-                        
+
+                    with ui.tab_panel(t('restaurant')).classes('h-full'):
+
                         with ui.row().classes('grid grid-cols-1 w-full'):
 
                                 #Big Meal
@@ -862,13 +866,13 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                         ui.icon('fastfood', color='primary').classes('w-full h-full text-8xl')
                                         with ui.card():
                                             #Describe
-                                            ui.label('Large Meal').style('font-weight: 1000; font-size: 120%')
+                                            ui.label(t('large_meal')).style('font-weight: 1000; font-size: 120%')
                                             with ui.list().props('dense separator'):
-                                                ui.item('Food: 100%')
-                                                ui.item('Water: 100%')
-                                                ui.item('Level: +10 points')
+                                                ui.item(t('food') + ': 100%')
+                                                ui.item(t('water') + ': 100%')
+                                                ui.item(t('level') + ': +10 points')
                                             ui.separator()
-                                            ui.button('Buy').classes('w-full')
+                                            ui.button(t('buy')).classes('w-full')
 
                                 #Medium Meal
                                 with ui.card().classes('w-full'):
@@ -876,104 +880,125 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                         ui.icon('dinner_dining', color='primary').classes('w-full h-full text-8xl')
                                         with ui.card():
                                             #Describe
-                                            ui.label('Medium Meal').style('font-weight: 1000; font-size: 120%')
+                                            ui.label(t('medium_meal')).style('font-weight: 1000; font-size: 120%')
                                             with ui.list().props('dense separator'):
-                                                ui.item('Food: 50%')
-                                                ui.item('Water: 50%')
-                                                ui.item('Level: +5 points')
+                                                ui.item(t('food') + ': 50%')
+                                                ui.item(t('water') + ': 50%')
+                                                ui.item(t('level') + ': +5 points')
                                             ui.separator()
-                                            ui.button('Buy').classes('w-full')
+                                            ui.button(t('buy')).classes('w-full')
 
-                    with ui.tab_panel('toy_shop'):
+                    with ui.tab_panel(t('toy_store')).classes('h-full'):
                         ui.label('Second tab')    
     # Service   
     with ui.tab_panel(service):
         ui.image(background_image_set).classes('absolute inset-0')
         with ui.card().classes("w-full text-center"):
-            ui.label('Find D.A.S.H Repair Service:').style('font-size: 200%; font-weight: 1000')
+            ui.label(t('find_dash_repair_service')).style('font-size: 200%; font-weight: 1000')
             #ebi card
     # Settings
     with ui.tab_panel(settings):
                 ui.label(t('settings_panel')).style('font-size: 200%; font-weight: 1000')
+                with ui.tabs().classes('w-full') as settings_tabs:
+                    ui_sett = ui.tab(t('ui_settings'))
+                    pwr_sett = ui.tab(t('power_settings'))
+                    network = ui.tab(t('network_settings'))
+                with ui.tab_panels(settings_tabs, value=ui_sett).classes('w-full'):
+                    with ui.tab_panel(ui_sett):
+                        #Dark mode switch
+                        with ui.switch(t('dark_mode')).bind_value(dark_mode) as dark_mode_switch:
+                            ui.label(t('dark_mode_enabled')).bind_visibility_from(dark_mode_switch, 'value').style('color: green')
+                            ui.tooltip(t('enable_dark_mode')).classes('bg-green')
 
-                ui.label(t('wifi_settings')).style('font-size: 130%; font-weight: 500')
-                ui.button(t('wifi/hotspot_settings'), on_click=show_wifi_dialog)
+                        ui.separator() # separator ui
 
-                ui.separator() # separator ui
+                        #Mobile layout switch
+                        ui.label(t('gui_mode_switch')).style('font-size: 130%; font-weight: 500')
+                        with ui.toggle({0: t('desktop'), 1: t('mobile')}, value=gui_layout, on_change=lambda e: layout_mod(layout_value=e.value)) as layout_switch:
+                            ui.tooltip(t('enable_mobile_layout')).classes('bg-green')
+                            
+                        ui.separator() # separator ui
 
-                #Dark mode switch
-                with ui.switch(t('dark_mode')).bind_value(dark_mode) as dark_mode_switch:
-                    ui.label(t('dark_mode_enabled')).bind_visibility_from(dark_mode_switch, 'value').style('color: green')
-                    ui.tooltip(t('enable_dark_mode')).classes('bg-green')
+                        #GUI Primary color changer
+                        ui.label(t('global_primary_color')).style('font-size: 130%; font-weight: 500')
+                        with ui.button(icon='colorize'):
+                            picker = ui.color_picker(on_pick=lambda e: (ui.colors(primary =f'{e.color}'), change_global_color(value=e.color)))
+                            picker.q_color.props('default-view=palette no-header no-footer')
 
-                ui.separator() # separator ui
+                        ui.separator() # separator ui
 
-                #Mobile layout switch
-                ui.label(t('gui_mode_switch')).style('font-size: 130%; font-weight: 500')
-                with ui.toggle({0: t('desktop'), 1: t('mobile')}, value=gui_layout, on_change=lambda e: layout_mod(layout_value=e.value)) as layout_switch:
-                    ui.tooltip(t('enable_mobile_layout')).classes('bg-green')
-                    
-                ui.separator() # separator ui
+                        #background image changer
+                        ui.label(t('background_image_change')).style('font-size: 130%; font-weight: 500')
+                        with ui.dialog().classes('w-columns-2xs') as bg_changer, ui.card():
+                            with ui.row().classes('grid grid-cols-3 w-full'):
+                                with ui.card().classes('w-full bg-transparent w-2xs'):
+                                    ui.image("images/background/119.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/119.png"))
+                                
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/14.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/14.png"))
 
-                #GUI Primary color changer
-                ui.label(t('global_primary_color')).style('font-size: 130%; font-weight: 500')
-                with ui.button(icon='colorize'):
-                    picker = ui.color_picker(on_pick=lambda e: (ui.colors(primary =f'{e.color}'), change_global_color(value=e.color)))
-                    picker.q_color.props('default-view=palette no-header no-footer')
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/25.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/25.png"))
 
-                ui.separator() # separator ui
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/35.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/35.png"))
 
-                ui.label(t('background_image_change')).style('font-size: 130%; font-weight: 500')
-                with ui.dialog().classes('w-columns-2xs') as bg_changer, ui.card():
-                    with ui.row().classes('grid grid-cols-3 w-full'):
-                        with ui.card().classes('w-full bg-transparent w-2xs'):
-                            ui.image("images/background/119.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/119.png"))
-                        
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/14.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/14.png"))
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/54.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/54.png"))
 
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/25.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/25.png"))
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/63.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/63.png"))
 
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/35.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/35.png"))
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/116.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/116.png"))
 
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/54.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/54.png"))
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/118.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/118.png"))
 
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/63.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/63.png"))
+                                with ui.card().classes('w-full bg-transparent'):
+                                    ui.image("images/background/125.png").props('fit=scale-down').classes('rounded-full')
+                                    ui.button(t('select'), on_click=lambda: change_background_image("images/background/125.png"))
+                        ui.button('Select background', on_click=bg_changer.open)
 
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/116.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/116.png"))
+                        ui.separator() # separator ui
 
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/118.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/118.png"))
 
-                        with ui.card().classes('w-full bg-transparent'):
-                            ui.image("images/background/125.png").props('fit=scale-down').classes('rounded-full')
-                            ui.button(t('select'), on_click=lambda: change_background_image("images/background/125.png"))
-                ui.button('Select background', on_click=bg_changer.open)
+                    with ui.tab_panel(pwr_sett):
+                        ui.label(t('power_mgmt')).style('font-size: 130%; font-weight: 500')
 
-                ui.separator() # separator ui
+                        power_mode_value = {'powersave': 1, 'ondemand': 2, 'performance': 3}.get(config.get('power-mode', 'ondemand'), 2)
 
-                ui.label(t('power_mgmt')).style('font-size: 130%; font-weight: 500')
+                        power_mode_select = ui.toggle(
+                            {1: t('power_save'), 2: t('normal'), 3: t('high_performance')},
+                            value=power_mode_value,
+                            on_change=lambda e: set_power_mode(e.value)
+                        )
 
-                power_mode_value = {'powersave': 1, 'ondemand': 2, 'performance': 3}.get(config.get('power-mode', 'ondemand'), 2)
+                    with ui.tab_panel(network):
 
-                power_mode_select = ui.toggle(
-                    {1: t('power_save'), 2: t('normal'), 3: t('high_performance')},
-                    value=power_mode_value,
-                    on_change=lambda e: set_power_mode(e.value)
-                )
+                        ui.label(t('wifi_settings')).style('font-size: 130%; font-weight: 500')
+                        ui.button(t('wifi/hotspot_settings'), on_click=show_wifi_dialog)
+
+                        ui.separator() # separator ui
+                
+
+                
+
+                
+
+                
+
+
+                
+                
     # About
     with ui.tab_panel(about):
         ui.image(background_image_set).classes('absolute inset-0')
