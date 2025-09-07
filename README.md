@@ -88,6 +88,10 @@ pip install -r requirements.txt
 - UI elements can be translated via language files
 - Language can be changed live from the Personalization tab
 
+### 11. **Plugin System**
+- Easily extend the toolkit with your own plugins and mods
+- Plugins can add new tabs, features, and UI elements
+
 ---
 
 ## How to Run
@@ -110,6 +114,7 @@ pip install -r requirements.txt
 - **config.json** – main configuration file (all persistent settings)
 - **images/** – backgrounds and profile images
 - **lang/** – language files (for multi-language support)
+- **plugins/** – folder for your own plugins and mods
 
 ---
 
@@ -121,6 +126,7 @@ pip install -r requirements.txt
 - Touch/gesture support (e.g., petting, reactions)
 - Cloud sync for settings
 - Full multi-language support
+- Plugin/mod marketplace
 
 ---
 
@@ -140,3 +146,50 @@ This is an early alpha release – many features are experimental or require a p
 
 This project is licensed under a modified MIT license (see LICENSE file for details).  
 **You are free to use, modify, and create your own versions of this software, but any modified versions must be distributed for free as a public fork. Commercial use is not permitted without explicit permission from the author.**
+
+---
+
+## Creating Your Own Plugins
+
+You can easily extend D.A.S.H Toolkit by creating your own plugins!
+
+### How to create a plugin:
+
+1. **Create a new Python file in the `plugins/` folder**, e.g. `plugins/my_plugin.py`.
+
+2. **Define a `register(ui, plugin_tabs)` function** in your plugin.  
+   This function should append a tuple `(tab_name, content_function)` to `plugin_tabs`.
+
+3. **Example plugin:**
+
+    ```python
+    # plugins/my_plugin.py
+    def register(ui, plugin_tabs):
+        def content():
+            ui.label('Hello from my plugin!')
+            # Add any UI elements you want here
+        plugin_tabs.append(('My Plugin', content))
+    ```
+
+4. **Restart the application.**  
+   Your plugin will appear as a new tab in the main menu.  
+   When you click the tab, your content will be displayed.
+
+5. **To remove a plugin, simply delete its `.py` file from the `plugins/` folder and restart the app.**
+
+### What can plugins do?
+
+- Add new tabs and panels to the interface
+- Display custom UI elements (buttons, charts, forms, etc.)
+- Integrate with external APIs or hardware
+- Extend robot functionality
+
+**Tip:**  
+Check the main code and other plugins for inspiration!
+
+---
+
+## Support
+
+For questions, ideas, or bug reports, open an issue on GitHub or Discord.  
+We appreciate your feedback and contributions!

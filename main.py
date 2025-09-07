@@ -23,6 +23,7 @@ import platform
 import glob
 import threading
 from fastapi import FastAPI
+import importlib.util
 
 api = FastAPI()
 
@@ -50,6 +51,32 @@ ml_switch = ['grid grid-cols-1 w-full opacity-95', 'grid grid-cols-2 w-full opac
 
 def generate_unique_id():
     return str(uuid.uuid4())
+
+# Plugin system
+plugin_tabs = []
+
+def load_plugins(ui, plugin_tabs):
+    plugins_dir = os.path.join(os.path.dirname(__file__), 'plugins')
+    active_plugins = []
+    if not os.path.exists(plugins_dir):
+        os.makedirs(plugins_dir)
+    print(f"[PLUGIN] Scanning folder: {plugins_dir}")
+    for file in os.listdir(plugins_dir):
+        if file.endswith('.py'):
+            plugin_path = os.path.join(plugins_dir, file)
+            spec = importlib.util.spec_from_file_location(file[:-3], plugin_path)
+            module = importlib.util.module_from_spec(spec)
+            try:
+                spec.loader.exec_module(module)
+                if hasattr(module, 'register'):
+                    module.register(ui, plugin_tabs)
+                    active_plugins.append(file)
+                    print(f"[PLUGIN] Loaded: {file}")
+                else:
+                    print(f"[PLUGIN] Skipped (no register()): {file}")
+            except Exception as e:
+                print(f"[PLUGIN] Error loading {file}: {e}")
+    print(f"[PLUGIN] Active plugins: {active_plugins}")
 
 # Create config.json file with default values
 def create_config(robot_name='Dash', coins=1500, os_version='1.0'):
@@ -523,8 +550,14 @@ with ui.tabs().classes('w-full') as tabs:
     playful_dash = ui.tab(t('playful'), icon='queue_music').style('font-size: 200%; font-weight: 1000')
     careful_dash = ui.tab(t('caring'), icon='hotel_class').style('font-size: 200%; font-weight: 1000')
     service = ui.tab(t('service'), icon='build').style('font-size: 200%; font-weight: 1000')
+    load_plugins(ui, plugin_tabs)
+    for tab, _ in plugin_tabs:
+        ui.tab(tab, icon='extension').style('font-size: 200%; font-weight: 1000')
     settings = ui.tab(t('settings_panel'), icon='settings').style('font-size: 200%; font-weight: 1000')
     about = ui.tab(t('about'), icon='info').style('font-size: 200%; font-weight: 1000')
+
+    # Load plugins and add their tabs
+    
 
 #Full app interface
 
@@ -1024,9 +1057,15 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                     with ui.image('images/unitronix.png').props('fit=scale-down'):
                         ui.tooltip('UNITRONIX').classes('bg-green').style('font-weight: 1000; font-size: 130%;')
 
+    for tab, content_func in plugin_tabs:
+        with ui.tab_panel(tab):
+            content_func()
+
 ui.timer(2.0, lambda: refresh_coins_label(coins_label))
+
 
 #Interface runing command
 if __name__ in {"__main__", "__mp_main__"}:
     ui.run(title='D.A.S.H Toolkit')
+
 
