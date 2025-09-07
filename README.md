@@ -1,4 +1,4 @@
-# D.A.S.H Toolkit (Early Alpha)
+# D.A.S.H Board (Early Alpha)
 
 > **Status:** Actively developed, many features are experimental or in progress.
 
@@ -6,9 +6,9 @@
 
 ---
 
-## What is D.A.S.H Toolkit?
+## What is D.A.S.H Board?
 
-D.A.S.H Toolkit is a modern configuration and personalization web panel for the D.A.S.H robot, built with Python and NiceGUI. It allows you to manage settings, monitor system parameters, personalize appearance, and interact with your robot via a user-friendly web interface.
+D.A.S.H Board is a modern configuration and personalization web panel for the D.A.S.H robot, built with Python and NiceGUI. It allows you to manage settings, monitor system parameters, personalize appearance, and interact with your robot via a user-friendly web interface.
 
 ---
 
@@ -151,7 +151,7 @@ This project is licensed under a modified MIT license (see LICENSE file for deta
 
 ## Creating Your Own Plugins
 
-You can easily extend D.A.S.H Toolkit by creating your own plugins!
+You can easily extend D.A.S.H Board by creating your own plugins!
 
 ### How to create a plugin:
 
