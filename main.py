@@ -648,9 +648,14 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                     ui.button('Zamknij', on_click=update_dialog.close)
                                     def do_update():
                                         try:
+                                            Path("/opt/D.A.S.H-Board/update_module").mkdir(parents=True, exist_ok=True)
+                                            shutil.copy('/opt/D.A.S.H-Board/config.json', '/opt/D.A.S.H-Board/update_module/config.json')
                                             subprocess.run(['git', 'pull'], cwd='/opt/D.A.S.H-Board', check=True)
                                             ui.notify('Aktualizacja zakończona sukcesem!')
                                             update_icon.props('icon=task_alt color=green')
+                                            os.remove('/opt/D.A.S.H-Board/config.json')
+                                            shutil.copy('/opt/D.A.S.H-Board/update_module/config.json', '/opt/D.A.S.H-Board/config.json')
+                                            os.remove('/opt/D.A.S.H-Board/update_module/config.json')
                                             update_dialog.close()
                                         except Exception as e:
                                             ui.notify(f'Błąd aktualizacji: {e}', color='red')
