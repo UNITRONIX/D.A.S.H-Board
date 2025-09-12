@@ -536,10 +536,36 @@ ui.add_head_html('''
 </style>
 ''')
 
+# Function to refresh coins label
 def refresh_coins_label(label):
     """Refreshes the coins label in the GUI without restarting the app."""
     config = read_config()
     label.set_text(config.get('coins', 0))
+
+
+def check_repo_update_status(repo_path='/home/unitronix/Dokumenty/GitHub/D.A.S.H-Toolkit', branch='main'):
+    """Sprawdza, czy lokalne repozytorium jest aktualne względem zdalnego."""
+    if not os.path.isdir(repo_path):
+        print(f"Repozytorium nie istnieje: {repo_path}")
+        return False, f"Repozytorium nie istnieje: {repo_path}"
+    try:
+        subprocess.run(['git', 'fetch'], cwd=repo_path, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo_path).decode().strip()
+        remote_commit = subprocess.check_output(['git', 'rev-parse', f'origin/{branch}'], cwd=repo_path).decode().strip()
+        if local_commit == remote_commit:
+            print("Repozytorium jest aktualne")
+            return True, "Repozytorium jest aktualne"
+        else:
+            print("Repozytorium wymaga aktualizacji")
+            return False, "Repozytorium wymaga aktualizacji"
+    except subprocess.CalledProcessError as e:
+        print(f"Błąd git: {e.output.decode().strip()}")
+        return False, f"Błąd git: {e.output.decode().strip()}"
+    except Exception as e:
+        print(f"Błąd: {e}")
+        return False, f"Błąd: {e}"
+
+check_repo_update_status()
 
 #Tab panel (nav-bar)
 with ui.tabs().classes('w-full') as tabs:
@@ -557,7 +583,6 @@ with ui.tabs().classes('w-full') as tabs:
     about = ui.tab(t('about'), icon='info').style('font-size: 200%; font-weight: 1000')
 
     # Load plugins and add their tabs
-    
 
 #Full app interface
 
@@ -602,14 +627,37 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                     with ui.card().classes('w-full'):
                         ui.label(t('check_updates')).style('font-weight: 1000; font-size: 120%')
                         with ui.row():
-                            ui.icon('task_alt', color='green').classes('text-5xl')
-
+                            update_icon = ui.icon('task_alt', color='green').classes('text-5xl')
                         with ui.list().props('dense separator'):
                             ui.item(t('no_updates')).style('font-weight: 1000')
                             ui.item(t('firmware_ver') + ': ' + config['os-version']).style('font-weight: 1000')
                             ui.item(t('app_ver') + ': 0.8').style('font-weight: 1000')
-                        ui.button(t('check_updates'), on_click=lambda: ui.notify(t('no_updates')))
-
+                        def on_check_updates():
+                            is_up_to_date, msg = check_repo_update_status()
+                            if is_up_to_date:
+                                with ui.dialog() as info_dialog, ui.card():
+                                    ui.label('Brak dostępnych aktualizacji.').style('font-size: 120%; font-weight: 1000; color: green')
+                                    ui.button('OK', on_click=info_dialog.close)
+                                info_dialog.open()
+                            else:
+                                update_icon.set_icon('download_for_offline')
+                                update_icon.set_color('yellow')
+                                with ui.dialog() as update_dialog, ui.card():
+                                    ui.label('Dostępna jest aktualizacja!').style('font-size: 120%; font-weight: 1000; color: orange')
+                                    ui.button('Zamknij', on_click=update_dialog.close)
+                                    def do_update():
+                                        # Tu można dodać logikę aktualizacji, np. git pull
+                                        try:
+                                            subprocess.run(['git', 'pull'], cwd='/home/unitronix/Dokumenty/GitHub/D.A.S.H-Toolkit', check=True)
+                                            ui.notify('Aktualizacja zakończona sukcesem!')
+                                            update_icon.set_icon('task_alt')
+                                            update_icon.set_color('green')
+                                            update_dialog.close()
+                                        except Exception as e:
+                                            ui.notify(f'Błąd aktualizacji: {e}', color='red')
+                                    ui.button('Wykonaj aktualizację', on_click=do_update)
+                                update_dialog.open()
+                        ui.button('Sprawdź aktualizacje', on_click=on_check_updates, icon='update').classes('w-full')
                 # dash Stats            
             with ui.row().classes('grid grid-cols-1 w-full opacity-95'):
                 with ui.card():
