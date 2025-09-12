@@ -967,7 +967,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
         ui.image(background_image_set).classes('absolute inset-0')
         with ui.card().classes("w-full text-center"):
             ui.label(t('find_dash_repair_service')).style('font-size: 200%; font-weight: 1000')
-            #ebi card
+        
     # Settings
     with ui.tab_panel(settings):
                 ui.label(t('settings_panel')).style('font-size: 200%; font-weight: 1000')
@@ -1013,6 +1013,35 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
 
 
                     with ui.tab_panel(pwr_sett):
+                        #power buttons
+                        # --- Restart & Shutdown buttons ---
+                        with ui.row().classes('grid grid-cols-2 gap-4 w-full'):
+                            # Restart button
+                            def show_restart_dialog():
+                                with ui.dialog() as restart_dialog, ui.card():
+                                    ui.label('Czy na pewno chcesz uruchomić ponownie system?').style('font-size: 120%; font-weight: 1000; color: red')
+                                    ui.button('Anuluj', on_click=restart_dialog.close)
+                                    def do_restart():
+                                        ui.notify('Restartowanie systemu...')
+                                        import subprocess
+                                        subprocess.Popen(['sudo', 'reboot'])
+                                    ui.button('Uruchom ponownie', on_click=do_restart)
+                                restart_dialog.open()
+                            ui.button('Uruchom ponownie', on_click=show_restart_dialog, icon='restart_alt').classes('w-full')
+                            # Shutdown button
+                            def show_shutdown_dialog():
+                                with ui.dialog() as shutdown_dialog, ui.card():
+                                    ui.label('Czy na pewno chcesz wyłączyć system?').style('font-size: 120%; font-weight: 1000; color: red')
+                                    ui.button('Anuluj', on_click=shutdown_dialog.close)
+                                    def do_shutdown():
+                                        ui.notify('Wyłączanie systemu...')
+                                        import subprocess
+                                        subprocess.Popen(['sudo', 'poweroff'])
+                                    ui.button('Wyłącz', on_click=do_shutdown)
+                                shutdown_dialog.open()
+                            ui.button('Wyłącz', on_click=show_shutdown_dialog, icon='power_settings_new').classes('w-full')
+
+                        #Power management settings
                         ui.label(t('power_mgmt')).style('font-size: 130%; font-weight: 500')
 
                         power_mode_value = {'powersave': 1, 'ondemand': 2, 'performance': 3}.get(config.get('power-mode', 'ondemand'), 2)

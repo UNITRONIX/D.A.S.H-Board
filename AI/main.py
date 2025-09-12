@@ -1,5 +1,4 @@
 from ollama import Client
-import pyttsx4
 
 client = Client()
 note = 'memoryEN.md'
@@ -13,7 +12,7 @@ with open(note_2, 'r', encoding='utf-8') as file:
 my_prompt = f'Dash turn on the flashlight {content} {content_2}'
 
 resp_fast = client.chat(
-    model='deepseek-r1:14b',
+    model='SpeakLeash/bielik-11b-v2.3-instruct:Q4_K_M',
     messages=[
         {"role": "user", "content": my_prompt}
     ],

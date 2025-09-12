@@ -7,3 +7,4 @@ starlette
 pytest-shutil
 uvicorn
 requests
+ollama
