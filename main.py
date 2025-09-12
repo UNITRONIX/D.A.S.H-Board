@@ -543,7 +543,7 @@ def refresh_coins_label(label):
     label.set_text(config.get('coins', 0))
 
 
-def check_repo_update_status(repo_path='/home/unitronix/Dokumenty/GitHub/D.A.S.H-Toolkit', branch='main'):
+def check_repo_update_status(repo_path='/opt/D.A.S.H-Board', branch='main'):
     """Sprawdza, czy lokalne repozytorium jest aktualne względem zdalnego."""
     if not os.path.isdir(repo_path):
         print(f"Repozytorium nie istnieje: {repo_path}")
@@ -648,7 +648,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                     def do_update():
                                         # Tu można dodać logikę aktualizacji, np. git pull
                                         try:
-                                            subprocess.run(['git', 'pull'], cwd='/home/unitronix/Dokumenty/GitHub/D.A.S.H-Toolkit', check=True)
+                                            subprocess.run(['git', 'pull'], cwd='/opt/D.A.S.H-Board', check=True)
                                             ui.notify('Aktualizacja zakończona sukcesem!')
                                             update_icon.set_icon('task_alt')
                                             update_icon.set_color('green')
