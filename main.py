@@ -642,18 +642,15 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                     ui.button('OK', on_click=info_dialog.close)
                                 info_dialog.open()
                             else:
-                                update_icon.set_icon('download_for_offline')
-                                update_icon.set_color('yellow')
+                                update_icon.props('icon=download_for_offline color=yellow')
                                 with ui.dialog() as update_dialog, ui.card():
                                     ui.label('Dostępna jest aktualizacja!').style('font-size: 120%; font-weight: 1000; color: orange')
                                     ui.button('Zamknij', on_click=update_dialog.close)
                                     def do_update():
-                                        # Tu można dodać logikę aktualizacji, np. git pull
                                         try:
                                             subprocess.run(['git', 'pull'], cwd='/opt/D.A.S.H-Board', check=True)
                                             ui.notify('Aktualizacja zakończona sukcesem!')
-                                            update_icon.set_icon('task_alt')
-                                            update_icon.set_color('green')
+                                            update_icon.props('icon=task_alt color=green')
                                             update_dialog.close()
                                         except Exception as e:
                                             ui.notify(f'Błąd aktualizacji: {e}', color='red')
