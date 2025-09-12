@@ -39,7 +39,7 @@ ui.query('.q-page').classes('flex')
 
 # SQL Lite database configure
 
-#test update module v2
+#test update module v3.5
 
 # Daily message list and function
 daily_message_list = ["I'm up and running!","All systems are a go!","Ready to assist!","Percolating and pondering...","Percolating and pondering...","Just doing robot things.","Optimizing my processes.","Always learning, always growing.","Bleep bloop, I'm online!","I'm feeling a little rusty today.","Robot mode: activated!."]
