@@ -664,7 +664,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                             os.remove('/opt/D.A.S.H-Board/update_module/config.json')
                                             update_dialog.close()
                                         except Exception as e:
-                                            ui.notify(f'{t('update_error')}: {e}', color='red')
+                                            ui.notify(f"{t('update_error')}: {e}", color='red')
                                     ui.button(t('perform_update'), on_click=do_update)
                                 update_dialog.open()
                         ui.button(t('check_updates'), on_click=on_check_updates, icon='update').classes('w-full')
