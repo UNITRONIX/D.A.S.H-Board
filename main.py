@@ -24,6 +24,7 @@ import glob
 import threading
 from fastapi import FastAPI
 import importlib.util
+from subprocess import call
 
 api = FastAPI()
 
@@ -638,16 +639,21 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                             is_up_to_date, msg = check_repo_update_status()
                             if is_up_to_date:
                                 with ui.dialog() as info_dialog, ui.card():
-                                    ui.label('Brak dostępnych aktualizacji.').style('font-size: 120%; font-weight: 1000; color: green')
+                                    ui.label(t('no_updates')).style('font-size: 120%; font-weight: 1000; color: green')
                                     ui.button('OK', on_click=info_dialog.close)
                                 info_dialog.open()
                             else:
                                 update_icon.props('icon=download_for_offline color=yellow')
                                 with ui.dialog() as update_dialog, ui.card():
-                                    ui.label('Dostępna jest aktualizacja!').style('font-size: 120%; font-weight: 1000; color: orange')
-                                    ui.button('Zamknij', on_click=update_dialog.close)
+                                    ui.label(t('update_is_available')).style('font-size: 120%; font-weight: 1000; color: orange')
+                                    ui.button(t('cancel'), on_click=update_dialog.close)
                                     def do_update():
                                         try:
+                                            call('sudo apt update -y', shell=True)
+                                            call('sudo apt upgrade -y', shell=True)
+                                            call('sudo pip3 install --upgrade pip', shell=True)
+                                            call('sudo pip3 install --upgrade setuptools', shell=True)
+                                            call('sudo pip3 install --upgrade wheel', shell=True)
                                             Path("/opt/D.A.S.H-Board/update_module").mkdir(parents=True, exist_ok=True)
                                             shutil.copy('/opt/D.A.S.H-Board/config.json', '/opt/D.A.S.H-Board/update_module/config.json')
                                             subprocess.run(['git', 'pull'], cwd='/opt/D.A.S.H-Board', check=True)
@@ -658,10 +664,10 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                             os.remove('/opt/D.A.S.H-Board/update_module/config.json')
                                             update_dialog.close()
                                         except Exception as e:
-                                            ui.notify(f'Błąd aktualizacji: {e}', color='red')
-                                    ui.button('Wykonaj aktualizację', on_click=do_update)
+                                            ui.notify(f'{t('update_error')}: {e}', color='red')
+                                    ui.button(t('perform_update'), on_click=do_update)
                                 update_dialog.open()
-                        ui.button('Sprawdź aktualizacje', on_click=on_check_updates, icon='update').classes('w-full')
+                        ui.button(t('check_updates'), on_click=on_check_updates, icon='update').classes('w-full')
                 # dash Stats            
             with ui.row().classes('grid grid-cols-1 w-full opacity-95'):
                 with ui.card():
@@ -1071,27 +1077,27 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                             # Restart button
                             def show_restart_dialog():
                                 with ui.dialog() as restart_dialog, ui.card():
-                                    ui.label('Czy na pewno chcesz uruchomić ponownie system?').style('font-size: 120%; font-weight: 1000; color: red')
-                                    ui.button('Anuluj', on_click=restart_dialog.close)
+                                    ui.label(t('want_to_restart')).style('font-size: 120%; font-weight: 1000; color: red')
+                                    ui.button(t('cancel'), on_click=restart_dialog.close)
                                     def do_restart():
-                                        ui.notify('Restartowanie systemu...')
+                                        ui.notify(t('restart_system'))
                                         import subprocess
                                         subprocess.Popen(['sudo', 'reboot'])
-                                    ui.button('Uruchom ponownie', on_click=do_restart)
+                                    ui.button(t('restart'), on_click=do_restart)
                                 restart_dialog.open()
-                            ui.button('Uruchom ponownie', on_click=show_restart_dialog, icon='restart_alt').classes('w-full')
+                            ui.button(t('restart'), on_click=show_restart_dialog, icon='restart_alt').classes('w-full')
                             # Shutdown button
                             def show_shutdown_dialog():
                                 with ui.dialog() as shutdown_dialog, ui.card():
-                                    ui.label('Czy na pewno chcesz wyłączyć system?').style('font-size: 120%; font-weight: 1000; color: red')
-                                    ui.button('Anuluj', on_click=shutdown_dialog.close)
+                                    ui.label(t('want_to_poweroff')).style('font-size: 120%; font-weight: 1000; color: red')
+                                    ui.button(t('cancel'), on_click=shutdown_dialog.close)
                                     def do_shutdown():
-                                        ui.notify('Wyłączanie systemu...')
+                                        ui.notify(t('shutdown_system'))
                                         import subprocess
                                         subprocess.Popen(['sudo', 'poweroff'])
-                                    ui.button('Wyłącz', on_click=do_shutdown)
+                                    ui.button(t('power_off'), on_click=do_shutdown)
                                 shutdown_dialog.open()
-                            ui.button('Wyłącz', on_click=show_shutdown_dialog, icon='power_settings_new').classes('w-full')
+                            ui.button(t('power_off'), on_click=show_shutdown_dialog, icon='power_settings_new').classes('w-full')
 
                         #Power management settings
                         ui.label(t('power_mgmt')).style('font-size: 130%; font-weight: 500')

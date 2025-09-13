@@ -54,6 +54,9 @@
     "update_available": "Dostępna aktualizacja!",
     "firmware_ver": "Wersja oprogramowania",
     "app_ver": "Wersja aplikacji",
+    "perform_update": "Wykonaj aktualizację",
+    "update_error": "Błąd aktualizacji",
+    "update_is_available": "Dostępna jest aktualizacja. Proszę zaktualizować do najnowszej wersji.",
 
   "_comment_3": "specification tab Translation",
 
@@ -110,6 +113,12 @@
     "network_settings": "Ustawienia sieci",
     "ui_settings": "Ustawienia Interfejsu",
     "power_settings": "Ustawienia zasilania",
+    "restart": "Restart",
+    "power_off": "Wyłącz",
+    "want_to_restart": "Czy chcesz uruchomić ponownie system?",
+    "want_to_poweroff": "Czy chcesz wyłączyć system?",
+    "shutdown_system": "Wyłączanie systemu...",
+    "restart_system": "Uruchamianie ponowne...",
 
   "_comment_5": "caring tab translation",
 

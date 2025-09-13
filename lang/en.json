@@ -54,6 +54,9 @@
     "update_available": "Update Available!",
     "firmware_ver": "Firmware Version",
     "app_ver": "App Version",
+    "perform_update": "Perform Update",
+    "update_error": "Update Error",
+    "update_is_available": "An update is available. Please update to the latest version.",
   
   "_comment_3": "specification tab Translation",
 
@@ -111,6 +114,12 @@
     "network_settings": "Network Settings",
     "ui_settings": "UI Settings",
     "power_settings": "Power Settings",
+    "restart": "Restart",
+    "power_off": "Power Off",
+    "want_to_restart": "Do you want to restart the system?",
+    "want_to_poweroff": "Do you want to power off the system?",
+    "shutdown_system": "Shutdown System...",
+    "restart_system": "Restart System...",
 
   "_comment_5": "caring tab translation",
 
