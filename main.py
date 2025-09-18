@@ -132,6 +132,19 @@ if not os.path.isfile('config.json'):
 else:
     config = read_config()
 
+#read app_ver.json file and return its content or specific key value
+def read_app_version(key=None):
+    try:
+        with open('app_ver.json', 'r') as f:
+            data = json.load(f)
+        if key:  # jeśli podano klucz
+            return data.get(key)  # zwróć wartość dla klucza lub None
+        return data  # jeśli nie podano klucza, zwróć cały plik
+    except FileNotFoundError:
+        print("App version file not found.")
+        return {} if key is None else None
+
+# language module
 LANG_DIR = os.path.join(os.path.dirname(__file__), 'lang')
 current_lang = {'code': 'en', 'data': {}}
 
@@ -159,7 +172,8 @@ def load_language_selector():
         return [
             {"code": "en", "label": "English", "flag": "images/language_flags/us.png"}
         ]
-    
+
+# Get background images list function   
 def get_background_images():
     bg_dir = os.path.join(os.path.dirname(__file__), 'images', 'background')
     # Obsługa plików png, jpg, jpeg
@@ -570,6 +584,9 @@ def check_repo_update_status(repo_path='/opt/D.A.S.H-Board', branch='main'):
 
 check_repo_update_status()
 
+def change_update_text(text):
+    update_item.text(text)
+
 #Tab panel (nav-bar)
 with ui.tabs().classes('w-full') as tabs:
     home = ui.tab(t('main_page'), icon='home').style('font-size: 200%; font-weight: 1000')
@@ -583,7 +600,6 @@ with ui.tabs().classes('w-full') as tabs:
     for tab, _ in plugin_tabs:
         ui.tab(tab, icon='extension').style('font-size: 200%; font-weight: 1000')
     settings = ui.tab(t('settings_panel'), icon='settings').style('font-size: 200%; font-weight: 1000')
-    about = ui.tab(t('about'), icon='info').style('font-size: 200%; font-weight: 1000')
 
     # Load plugins and add their tabs
 
@@ -632,9 +648,9 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         with ui.row():
                             update_icon = ui.icon('task_alt', color='green').classes('text-5xl')
                         with ui.list().props('dense separator'):
-                            ui.item(t('no_updates')).style('font-weight: 1000')
-                            ui.item(t('firmware_ver') + ': ' + config['os-version']).style('font-weight: 1000')
-                            ui.item(t('app_ver') + ': 0.8').style('font-weight: 1000')
+                            update_item = ui.item(t('no_updates')).style('font-weight: 1000; color: green')
+                            ui.item(f"{t('firmware_ver')}: {read_app_version('firmware_version')}").style('font-weight: 200')
+                            ui.item(f"{t('app_ver')}: {read_app_version('app_version')}").style('font-weight: 200')
                         def on_check_updates():
                             is_up_to_date, msg = check_repo_update_status()
                             if is_up_to_date:
@@ -644,6 +660,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                 info_dialog.open()
                             else:
                                 update_icon.props('icon=download_for_offline color=yellow')
+                                update_item.props(t('update_available'))
                                 with ui.dialog() as update_dialog, ui.card():
                                     ui.label(t('update_is_available')).style('font-size: 120%; font-weight: 1000; color: orange')
                                     ui.button(t('cancel'), on_click=update_dialog.close)
@@ -1033,6 +1050,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                     ui_sett = ui.tab(t('ui_settings'))
                     pwr_sett = ui.tab(t('power_settings'))
                     network = ui.tab(t('network_settings'))
+                    about_robot = ui.tab(t('about'))
                 with ui.tab_panels(settings_tabs, value=ui_sett).classes('w-full'):
                     with ui.tab_panel(ui_sett):
                         #Dark mode switch
@@ -1068,7 +1086,6 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         ui.button(t('background_image_change'), on_click=bg_changer.open)
 
                         ui.separator() # separator ui
-
 
                     with ui.tab_panel(pwr_sett):
                         #power buttons
@@ -1116,34 +1133,12 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         ui.button(t('wifi/hotspot_settings'), on_click=show_wifi_dialog)
 
                         ui.separator() # separator ui
-                
-    # About
-    with ui.tab_panel(about):
-        ui.image(background_image_set).classes('absolute inset-0')
-        with ui.row().classes('grid grid-cols-2 w-full'):
-            with ui.card():
-                ui.label('Made by UNITRONIX').style('font-size: 150%')
-                ui.label('D.A.S.H Toolkit').style('font-size: 200%; font-weight: 1000')
-                ui.separator()
-                ui.label('Github')
-                ui.chip('ERS Labolatories Github', icon='ads_click', on_click=lambda: ui.navigate.to("https://github.com/ers-laboratories/Aibo-Toolkit/tree/main", new_tab=True)).style('font-size: 150%')
 
-            with ui.card():
-                ui.label('Resources:').style('font-size: 150%')
-                ui.separator()
-                ui.label('Github')
-                ui.chip('Gifs Page', icon='ads_click', on_click=lambda: ui.navigate.to("https://www.flaticon.com/", new_tab=True)).style('font-size: 150%')
-                ui.chip('Icons and fonts', icon='ads_click', on_click=lambda: ui.navigate.to("https://fonts.google.com/icons", new_tab=True)).style('font-size: 150%')
-            
-        with ui.card().classes("w-full opacity-95"):
-            
-            ui.label('Our Team:').style('font-weight: 1000; font-size: 130%')
-
-            with ui.row().classes('grid grid-cols-1 gap-4 w-full'):
-                with ui.card():
-                    with ui.image('images/unitronix.png').props('fit=scale-down'):
-                        ui.tooltip('UNITRONIX').classes('bg-green').style('font-weight: 1000; font-size: 130%;')
-
+                    with ui.tab_panel(about_robot):
+                            ui.label(f"D.A.S.H").style('font-size: 120%; font-weight: 1000')
+                            ui.label("Digital Autonomous Smart Hound").style('font-size: 110%; font-weight: 500; color: gray')
+                            ui.label(f"Model: {read_app_version('robot_model')}").style('font-size: 110%; font-weight: 500')
+                            ui.label(f"App Version: {read_app_version('app_version')}").style('font-size: 110%; font-weight: 500')
     for tab, content_func in plugin_tabs:
         with ui.tab_panel(tab):
             content_func()
@@ -1153,6 +1148,6 @@ ui.timer(2.0, lambda: refresh_coins_label(coins_label))
 
 #Interface runing command
 if __name__ in {"__main__", "__mp_main__"}:
-    ui.run(title='D.A.S.H Toolkit')
+    ui.run(title='D.A.S.H Board', port=80)
 
 
