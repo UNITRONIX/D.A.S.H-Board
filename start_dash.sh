@@ -3,5 +3,5 @@ cd "$(dirname "$0")"
 sudo git config --global --add safe.directory /opt/D.A.S.H-Board
 #sudo apt-get install python3-dev
 #sudo apt-get install python3-pip
-#sudo pip3 install -r requirements.txt
+sudo pip3 install -r requirements.txt --break-system-packages
 sudo python3 main.py

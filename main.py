@@ -668,9 +668,9 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                                         try:
                                             call('sudo apt update -y', shell=True)
                                             call('sudo apt upgrade -y', shell=True)
-                                            call('sudo pip3 install --upgrade pip', shell=True)
-                                            call('sudo pip3 install --upgrade setuptools', shell=True)
-                                            call('sudo pip3 install --upgrade wheel', shell=True)
+                                            call('sudo pip3 install --upgrade pip --break-system-packages', shell=True)
+                                            call('sudo pip3 install --upgrade setuptools --break-system-packages', shell=True)
+                                            call('sudo pip3 install --upgrade wheel --break-system-packages', shell=True)
                                             Path("/opt/D.A.S.H-Board/update_module").mkdir(parents=True, exist_ok=True)
                                             shutil.copy('/opt/D.A.S.H-Board/config.json', '/opt/D.A.S.H-Board/update_module/config.json')
                                             subprocess.run(['git', 'pull'], cwd='/opt/D.A.S.H-Board', check=True)
