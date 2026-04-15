@@ -1076,6 +1076,7 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                         ui.separator() # separator ui
 
                         #background image changer
+                        ui.label(t('background_image_change')).style('font-size: 130%; font-weight: 500')
                         with ui.dialog().classes('w-columns-2xs') as bg_changer, ui.card().classes('p-6 shadow-lg'):
                             with ui.row().classes('grid grid-cols-3 gap-4 w-full'):
                                 for img_path in get_background_images():
@@ -1139,6 +1140,9 @@ with ui.tab_panels(tabs, value=home).classes('w-full'):
                             ui.label("Digital Autonomous Smart Hound").style('font-size: 110%; font-weight: 500; color: gray')
                             ui.label(f"Model: {read_app_version('robot_model')}").style('font-size: 110%; font-weight: 500')
                             ui.label(f"App Version: {read_app_version('app_version')}").style('font-size: 110%; font-weight: 500')
+                            ui.label(f"Developed by UNITRONIX").style('font-size: 110%; font-weight: 500')
+                            ui.separator()
+                            ui.label(t('unique_id') + f": {config['unique-id']}").style('font-size: 110%; font-weight: 500')
     for tab, content_func in plugin_tabs:
         with ui.tab_panel(tab):
             content_func()
